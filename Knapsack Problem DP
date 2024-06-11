@@ -1,0 +1,66 @@
+#include<bits/stdc++.h>
+using namespace std;
+class Solution
+{
+    public:
+    int solve(int W,int wt[],int val[],int n,int index,int currW,int currV,vector<vector<int>> &dp)
+    {
+        if(index >= n)
+        {
+            return currV;
+        }
+        
+        if(dp[index][currW] != -1)
+        {
+            return dp[index][currW];
+        }
+        
+        //exclude
+        int leftV = solve(W,wt,val,n,index + 1,currW,currV,dp);
+        
+        //include
+        int rightV = 0;
+        if(currW + wt[index] <= W)
+        {
+            rightV = val[index] + solve(W,wt,val,n,index + 1,currW + wt[index],currV,dp);
+        }
+        
+        return dp[index][currW] = max(leftV,rightV);
+    }
+
+    int knapSack(int W, int wt[], int val[], int n) 
+    {
+        int index = 0,currW = 0,currV = 0;
+        vector<vector<int>> dp(n,vector<int>(W+1,-1));
+        return solve(W,wt,val,n,index,currW,currV,dp);
+    }
+};
+
+int main()
+ {
+    //taking total testcases
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        //reading number of elements and weight
+        int n, w;
+        cin>>n>>w;
+        
+        int val[n];
+        int wt[n];
+        
+        //inserting the values
+        for(int i=0;i<n;i++)
+            cin>>val[i];
+        
+        //inserting the weights
+        for(int i=0;i<n;i++)
+            cin>>wt[i];
+        Solution ob;
+        //calling method knapSack()
+        cout<<ob.knapSack(w, wt, val, n)<<endl;
+        
+    }
+	return 0;
+}
